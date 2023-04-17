@@ -1,6 +1,7 @@
 package com.example.composeapril
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -36,8 +37,18 @@ class MainActivity : ComponentActivity() {
                         }) {
                             Text(text = "ADD")
                         }
+                        TextButton(onClick = {
+                            list.removeFirst()
+                        }) {
+                            Text(text = "REMOVE")
+                        }
+                        TextButton(onClick = {
+                            list.shuffle()
+                        }) {
+                            Text(text = "Shuffle")
+                        }
                         list.forEach { valueText ->
-                            List(valueText)
+                                List(valueText)
                         }
                     }
                 }
