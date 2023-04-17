@@ -31,6 +31,11 @@ class MainActivity : ComponentActivity() {
 
                     val list = remember { mutableStateListOf("cat 1", "dog 2", "unicorn 3") }
                     Column(Modifier.padding(0.dp, 30.dp)) {
+                        TextButton(onClick = {
+                            list.add("Dragon ${list.size + 1}")
+                        }) {
+                            Text(text = "ADD")
+                        }
                         list.forEach { valueText ->
                             List(valueText)
                         }
