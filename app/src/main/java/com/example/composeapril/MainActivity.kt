@@ -50,8 +50,9 @@ class MainActivity : ComponentActivity() {
 
 //                    LazyColumnn()
 
-                    ClickerClickerVM()
+//                    ClickerClickerVM()
 
+                    ClickerText()
 
                 }
             }
