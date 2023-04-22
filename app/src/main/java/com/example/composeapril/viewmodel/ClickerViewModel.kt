@@ -8,26 +8,27 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ClickerViewModel: ViewModel() {
 
-    private val _counter = MutableStateFlow(0)
-    val counter: StateFlow<Int> = _counter
-
-    private val _checkbox = MutableStateFlow(false)
-    val checkbox: StateFlow<Boolean> = _checkbox
+    private val _clickerState = MutableStateFlow(ClickerDataState())
+    val clickerState: StateFlow<ClickerDataState> = _clickerState
 
     fun onCounterClick() {
         viewModelScope.launch(Dispatchers.IO) {
-            _counter.value++
+            _clickerState.update {
+                it.copy(count = it.count + 1)
+            }
         }
     }
 
     fun onCheckBoxChecked(checkValue: Boolean){
         viewModelScope.launch(Dispatchers.IO) {
-            _checkbox.value = checkValue
+            _clickerState.update {
+                it.copy(checkedBox = checkValue, count = it.count + 1)
+            }
         }
     }
-
 }
