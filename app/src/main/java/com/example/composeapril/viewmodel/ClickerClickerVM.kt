@@ -31,8 +31,8 @@ fun ClickerClickerVM() {
     В итоге изменение значения в StateFlow будет приводить к перезапуску Composable функции.
      */
     
-    Clickers(count = counter, onCounterClick = viewModel::onCounterClick)
-    EnableCheck(enabled = checked, onEnabledChange = viewModel::onCheckBoxChecked)
+    Clickers(count = counter, onCounterClick = viewModel::onCounterClick,
+        enabled = checked, onEnabledChange = viewModel::onCheckBoxChecked)
 
     /**
      * ClickerClickerVM берет все необходимые данные из модели и передает в Clickers.
@@ -41,21 +41,17 @@ fun ClickerClickerVM() {
 }
 
 @Composable
-fun Clickers(count: Int, onCounterClick: () -> Unit) {
+fun Clickers(count: Int, onCounterClick: () -> Unit, enabled: Boolean, onEnabledChange: (Boolean) -> Unit) {
     Column {
         Text(
             text = "Clicks: $count",
             modifier = Modifier.clickable(onClick = onCounterClick)
         )
         println("$count")
-    }
-}
-
-@Composable
-fun EnableCheck(enabled: Boolean, onEnabledChange: (Boolean) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Checkbox(checked = enabled, onCheckedChange = onEnabledChange)
-        Text("checking checkbox TEXT)))")
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(checked = enabled, onCheckedChange = onEnabledChange)
+            Text("checking checkbox TEXT)))")
+        }
     }
 }
 
