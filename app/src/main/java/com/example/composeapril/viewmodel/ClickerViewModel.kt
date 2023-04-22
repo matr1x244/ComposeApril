@@ -15,9 +15,18 @@ class ClickerViewModel: ViewModel() {
     private val _counter = MutableStateFlow(0)
     val counter: StateFlow<Int> = _counter
 
+    private val _checkbox = MutableStateFlow(false)
+    val checkbox: StateFlow<Boolean> = _checkbox
+
     fun onCounterClick() {
         viewModelScope.launch(Dispatchers.IO) {
             _counter.value++
+        }
+    }
+
+    fun onCheckBoxChecked(checkValue: Boolean){
+        viewModelScope.launch(Dispatchers.IO) {
+            _checkbox.value = checkValue
         }
     }
 
