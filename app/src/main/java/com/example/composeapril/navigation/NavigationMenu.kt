@@ -17,3 +17,12 @@ fun NavigationSaleScreen(){
 fun NavigationWalletScreen(){
     Text(text = "Wallet Screen OPEN")
 }
+
+/**
+ * Вложенные экраны
+ */
+
+@Composable
+fun NavigationWalletScreenDetail(){
+    Text(text = "NavigationWalletScreenDetail OPEN Detail")
+}

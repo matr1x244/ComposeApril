@@ -23,10 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.composeapril.navigation.NavigationHomeScreen
 import com.example.composeapril.navigation.NavigationSaleScreen
 import com.example.composeapril.navigation.NavigationWalletScreen
+import com.example.composeapril.navigation.NavigationWalletScreenDetail
 import com.example.composeapril.ui.theme.ComposeAprilTheme
 
 class MainActivity : ComponentActivity() {
@@ -60,7 +62,10 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable("home") { NavigationHomeScreen() }
                 composable("sale") { NavigationSaleScreen() }
-                composable("wallet") { NavigationWalletScreen() }
+                navigation(startDestination = "wallet", route = "wallet_graph") {
+                    composable("wallet") { NavigationWalletScreen() }
+                    composable("wallet_detail") { NavigationWalletScreenDetail() }
+                }
             }
             Row(
                 modifier = Modifier
@@ -91,7 +96,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Text(
                     text = "wallet",
-                    modifier = Modifier.clickable { navController.navigate("wallet") },
+                    modifier = Modifier.clickable { navController.navigate("wallet_graph") },
                     color = Color.White
                 )
             }
