@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,6 +38,7 @@ class MainActivity : ComponentActivity() {
                      * Navigation default compose
                      */
 //                    NavigationUser() // вариант без navigation menu default google :(
+                    val activity = LocalViewModelStoreOwner.current
                     NavigationUserDefault() // вариант c navigation menu default google :)
                 }
             }
@@ -48,7 +50,6 @@ class MainActivity : ComponentActivity() {
     private fun NavigationUserDefault(){
         Column(modifier = Modifier.fillMaxSize()) {
             val navController = rememberNavController()
-
             NavHost(
                 navController = navController,
                 startDestination = "NavigationUsers",
@@ -58,12 +59,13 @@ class MainActivity : ComponentActivity() {
                     onUserClick = { navController.navigate("user") },
                 ) }
                 composable("user") { backStackEntry ->
+                    val activity = checkNotNull(LocalViewModelStoreOwner.current)
                     val userEntry = remember (backStackEntry){
                         navController.getBackStackEntry("NavigationUsers")
                     }
                     NavigationUserScreenDetail(
                         "$id",
-                        usersSharedViewModel = viewModel(userEntry)
+                        usersSharedViewModel = viewModel(activity)
                     )
                 }
             }
