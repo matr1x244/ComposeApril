@@ -6,16 +6,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.composeapril.viewmodel.UsersViewModel
+import com.example.composeapril.viewmodel.UsersSharedViewModel
 
 @Composable
 fun NavigationUserScreenDetail(
     id: String?,
-    usersViewModel: UsersViewModel = viewModel()
+    usersSharedViewModel: UsersSharedViewModel = viewModel()
 ) {
     Text(text = "User $id OPEN")
     Log.d(TAG,"@@@@ user $id")
-    Log.d(TAG,"@@@@ viewModel ${usersViewModel.hashCode()}")
+    Log.d(TAG,"@@@@ viewModel ${usersSharedViewModel.hashCode()}")
     Log.d(TAG,"@@@@ viewModelStoreOwner ${LocalViewModelStoreOwner.current?.javaClass?.simpleName}")
 
     /**

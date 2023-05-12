@@ -9,11 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composeapril.viewmodel.UsersSharedViewModel
 
 @Composable
 fun NavigationUsers(
-    onUser100Click: () -> Unit,
-    onUser200Click: () -> Unit,
+    onUserClick: () -> Unit,
+    usersSharedViewModel: UsersSharedViewModel = viewModel()
 ) {
     Column {
         Text(text = "Users screen", modifier = Modifier
@@ -21,12 +23,8 @@ fun NavigationUsers(
             .align(alignment = CenterHorizontally))
 
         Text(
-            text = "User 1",
-            modifier = Modifier.clickable(onClick = onUser100Click))
+            text = "User",
+            modifier = Modifier.clickable(onClick = onUserClick))
 
-        Text(
-            text = "User 2",
-            modifier = Modifier.clickable(onClick = onUser200Click)
-        )
     }
 }
