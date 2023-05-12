@@ -32,15 +32,14 @@ import com.example.composeapril.navigation.NavigationWalletScreenDetail
 import com.example.composeapril.ui.theme.ComposeAprilTheme
 
 class MainActivity : ComponentActivity() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             ComposeAprilTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     /**
                      * Navigation default compose
@@ -60,7 +59,8 @@ class MainActivity : ComponentActivity() {
                 startDestination = "home",
                 modifier = Modifier.weight(1f)
             ) {
-                composable("home") { NavigationHomeScreen() }
+                composable("home") { NavigationHomeScreen(onSaleClick = { navController.navigate("sale") }) }
+
                 composable("sale") { NavigationSaleScreen() }
                 navigation(startDestination = "wallet", route = "wallet_graph") {
                     composable("wallet") { NavigationWalletScreen() }
@@ -103,3 +103,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
