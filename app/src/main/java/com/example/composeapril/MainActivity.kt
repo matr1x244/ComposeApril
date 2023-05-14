@@ -21,12 +21,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.composeapril.rememberObserver.RememberObserverTestingLifeCycle
 import com.example.composeapril.ui.theme.ComposeAprilTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
@@ -59,19 +61,16 @@ class MainActivity : ComponentActivity() {
                 Text("val homeTime Start = $homeTime \n time Really Screen = $timeScreenStopReally")
                 ClickCounter()
 
-                DisposableEffect(key1 = Unit) {
-                    /**
-                     * Функция DisposableEffect так же, как и LaunchedEffect, позволяет выполнить код один раз при первом вызове Composable кода.
-                     * Но есть пара отличий. Код будет выполнен не в корутине. И у нас есть возможность повесить свой колбэк на onForgotten.
-                     * Т.е. эта функция подходит, когда нам нужно подписаться на что-либо при старте экрана, а при закрытии - отписаться.
-                     */
-                    var counter = 0
-                    onDispose {
+                val scope = rememberCoroutineScope()
+                Text(text = "Click", modifier = Modifier.clickable {
+                    scope.launch {
+                        var count = 0
                         while (true) {
-                            println("@@@@@ LaunchedEffect counter job = ${counter++}")
+                           println("@@@@ count = ${count++}")
+                            delay(1000)
                         }
                     }
-                }
+                })
             }
         }
 
