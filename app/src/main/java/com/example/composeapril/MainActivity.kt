@@ -61,16 +61,15 @@ class MainActivity : ComponentActivity() {
                 Text("val homeTime Start = $homeTime \n time Really Screen = $timeScreenStopReally")
                 ClickCounter()
 
-                val scope = rememberCoroutineScope()
-                Text(text = "Click", modifier = Modifier.clickable {
-                    scope.launch {
-                        var count = 0
-                        while (true) {
-                           println("@@@@ count = ${count++}")
-                            delay(1000)
-                        }
+                var count by remember { mutableStateOf(0) }
+                Text(text = "count = $count")
+
+                LaunchedEffect(key1 = Unit) {
+                    while (true) {
+                        delay(1000)
+                        count++
                     }
-                })
+                }
             }
         }
 
