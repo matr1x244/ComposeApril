@@ -20,6 +20,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -61,15 +62,30 @@ class MainActivity : ComponentActivity() {
                 Text("val homeTime Start = $homeTime \n time Really Screen = $timeScreenStopReally")
                 ClickCounter()
 
-                var count by remember { mutableStateOf(0) }
-                Text(text = "count = $count")
+//                var count by remember { mutableStateOf(0) }
 
-                LaunchedEffect(key1 = Unit) {
+                /**
+                 * produceState создает и возвращает нам State, а в его блоке кода (корутине) мы используем поле value,
+                 * чтобы менять значение этого State. Раз в секунду мы увеличиваем это значение на 1.
+                 *
+                 * В качестве полезного применения produceState обычно приводят пример с загрузкой данных.
+                 * Мы стартуем корутину, постим в value статус Loading и начинаем в этой корутине что-то загружать.
+                 * После завершения загрузки постим в value результат Result<...> или ошибку Error.
+                 */
+                val count by produceState(initialValue = 0) {
                     while (true) {
                         delay(1000)
-                        count++
+                        value++
                     }
                 }
+                Text(text = "count = $count")
+
+//                LaunchedEffect(key1 = Unit) {
+//                    while (true) {
+//                        delay(1000)
+//                        count++
+//                    }
+//                }
             }
         }
 
