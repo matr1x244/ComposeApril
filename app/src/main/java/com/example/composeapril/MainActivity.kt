@@ -1,5 +1,9 @@
 package com.example.composeapril
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,12 +16,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.example.composeapril.rememberObserver.RememberObserverTestingLifeCycle
 import com.example.composeapril.ui.theme.ComposeAprilTheme
 import kotlinx.coroutines.delay
@@ -53,35 +59,36 @@ class MainActivity : ComponentActivity() {
                 Text("val homeTime Start = $homeTime \n time Really Screen = $timeScreenStopReally")
                 ClickCounter()
 
-                LaunchedEffect(key1 = Unit) {
+                DisposableEffect(key1 = Unit) {
                     /**
-                     * "key" Функция LaunchedEffect на вход просит key.
-                     * По исходникам видно, что этот key из LaunchedEffect передается в remember. Что это дает?
-                     * При смене значения key, remember вызовет onForgotten для текущего объекта,
-                     * создаст новый объект и вызовет у него onRemembered.
-                     * Т.е. как будто мы убрали remember из Composition и поместили обратно.
-                     * Таким образом старая корутина в LaunchedEffectImpl отменится, а новая стартует.
-                     * Это может быть полезно, если мы извне получили новое значение и хотим заново стартовать корутину.
-                     *
-                     * Если вам такая опция не нужна, то просто передавайте в качестве key значение true, Unit, null или т.п.
-                     */
-                    /**
-                     * "key" Функция LaunchedEffect на вход просит key.
-                     * По исходникам видно, что этот key из LaunchedEffect передается в remember. Что это дает?
-                     * При смене значения key, remember вызовет onForgotten для текущего объекта,
-                     * создаст новый объект и вызовет у него onRemembered.
-                     * Т.е. как будто мы убрали remember из Composition и поместили обратно.
-                     * Таким образом старая корутина в LaunchedEffectImpl отменится, а новая стартует.
-                     * Это может быть полезно, если мы извне получили новое значение и хотим заново стартовать корутину.
-                     *
-                     * Если вам такая опция не нужна, то просто передавайте в качестве key значение true, Unit, null или т.п.
+                     * Функция DisposableEffect так же, как и LaunchedEffect, позволяет выполнить код один раз при первом вызове Composable кода.
+                     * Но есть пара отличий. Код будет выполнен не в корутине. И у нас есть возможность повесить свой колбэк на onForgotten.
+                     * Т.е. эта функция подходит, когда нам нужно подписаться на что-либо при старте экрана, а при закрытии - отписаться.
                      */
                     var counter = 0
-                    while (true) {
-                        println("@@@@@ LaunchedEffect counter job = ${counter++}")
-                        delay(1000)
+                    onDispose {
+                        while (true) {
+                            println("@@@@@ LaunchedEffect counter job = ${counter++}")
+                        }
                     }
                 }
+            }
+        }
+
+    }
+
+    @Composable
+    fun BroadcastReceiver(intentFilter: IntentFilter, onReceive: (Intent) -> Unit) {
+        val context = LocalContext.current
+        DisposableEffect(context) {
+            val broadcastReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) {
+                    onReceive(intent)
+                }
+            }
+            context.registerReceiver(broadcastReceiver, intentFilter)
+            onDispose {
+                context.unregisterReceiver(broadcastReceiver)
             }
         }
     }
