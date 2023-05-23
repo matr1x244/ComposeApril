@@ -3,24 +3,31 @@ package com.example.composeapril
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Checkbox
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.example.composeapril.ui.theme.ComposeAprilTheme
-import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -32,36 +39,43 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    sideEffect()
+                    animatedEffect()
                 }
             }
         }
     }
 
-
-    /**
-     * Функция SideEffect гарантирует, что код будет выполнен только в случае успешного выполнения Composable кода.
-     * Если же что-то пошло не так, что SideEffect не выполнится.
-     */
-
-    /**
-     * При включении чекбокса мы дважды пишем в лог, а потом бросаем исключение.
-     * Но первая запись в лог сделана в Composable коде, а вторая - в функции SideEffect.
-     */
     @Composable
-    private fun sideEffect() {
-        Column {
-            var checked by remember { mutableStateOf(false) }
-            Checkbox(checked = checked, onCheckedChange = { checked = it })
-            if (checked) {
-               println("@@@@ HomeScreen log")
-                SideEffect {
-                    print("@@@@ HomeScreen log in SideEffect")
-//                    val a = 1/ 0
-                }
+    private fun animatedEffect() {
+        var visible by remember { mutableStateOf(true) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxSize()
+        ) {
+
+            AnimatedVisibility(visible = visible) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .clip(shape = CircleShape),
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = "IMAGE",
+                    contentScale = ContentScale.None
+                )
+            }
+
+            Button(modifier = Modifier
+                .align(alignment = Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 10.dp), onClick = { visible = !visible }) {
+                Text(text = "Toggle Visibility")
             }
         }
     }
+
 
 }
 
