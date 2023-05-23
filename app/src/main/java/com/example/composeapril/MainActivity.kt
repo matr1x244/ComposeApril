@@ -5,12 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    sliderPosition()
+                    sideEffect()
                 }
             }
         }
@@ -38,47 +40,28 @@ class MainActivity : ComponentActivity() {
 
 
     /**
-     * Получилось следующее:
-    - remember хранит для нас State
-    - при каждом движении слайдера, идет вызов функции TrackPosition и мы пишем актуальное значение позиции слайдера в State
-    - корутина в LaunchedEffect раз в секунду читает актуальное значение позиции слайдера из State и выводит данные
+     * Функция SideEffect гарантирует, что код будет выполнен только в случае успешного выполнения Composable кода.
+     * Если же что-то пошло не так, что SideEffect не выполнится.
      */
 
     /**
-     * Ровно то же самое делает функция rememberUpdatedState.
-     * Используем эту функцию в нашем примере и получим чуть более лаконичный код:
+     * При включении чекбокса мы дважды пишем в лог, а потом бросаем исключение.
+     * Но первая запись в лог сделана в Composable коде, а вторая - в функции SideEffect.
      */
-
     @Composable
-    private fun sliderPosition() {
+    private fun sideEffect() {
         Column {
-            var sliderPosition by remember { mutableStateOf(1f) }
-
-            Slider(
-                value = sliderPosition,
-                valueRange = 1f..10f,
-                onValueChange = { sliderPosition = it })
-
-            TrackPosition(position = sliderPosition)
-            Text(text = sliderPosition.toString())
-        }
-    }
-
-    private @Composable
-    fun TrackPosition(position: Float) {
-//        val positionState = remember { mutableStateOf(position) }
-//        positionState.value = position
-
-        val positionState by rememberUpdatedState(newValue = position)
-
-        LaunchedEffect(key1 = Unit) {
-            while(true) {
-                delay(1000)
-                println("@@@@ track position ${positionState.toString()}")
+            var checked by remember { mutableStateOf(false) }
+            Checkbox(checked = checked, onCheckedChange = { checked = it })
+            if (checked) {
+               println("@@@@ HomeScreen log")
+                SideEffect {
+                    print("@@@@ HomeScreen log in SideEffect")
+//                    val a = 1/ 0
+                }
             }
         }
     }
-
 
 }
 
