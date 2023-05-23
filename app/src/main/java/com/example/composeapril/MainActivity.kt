@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 .fillMaxSize()
         ) {
 
-            AnimatedVisibility(visible = visible, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(visible = visible, enter = fadeIn() + slideInHorizontally(), exit = fadeOut() + slideOutHorizontally()) {
                 Image(
                     modifier = Modifier
                         .fillMaxWidth()
