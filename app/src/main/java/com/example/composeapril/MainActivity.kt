@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.composeapril.ui.theme.ComposeAprilTheme
@@ -43,6 +44,11 @@ class MainActivity : ComponentActivity() {
     - корутина в LaunchedEffect раз в секунду читает актуальное значение позиции слайдера из State и выводит данные
      */
 
+    /**
+     * Ровно то же самое делает функция rememberUpdatedState.
+     * Используем эту функцию в нашем примере и получим чуть более лаконичный код:
+     */
+
     @Composable
     private fun sliderPosition() {
         Column {
@@ -60,13 +66,15 @@ class MainActivity : ComponentActivity() {
 
     private @Composable
     fun TrackPosition(position: Float) {
-        val positionState = remember { mutableStateOf(position) }
-        positionState.value = position
+//        val positionState = remember { mutableStateOf(position) }
+//        positionState.value = position
+
+        val positionState by rememberUpdatedState(newValue = position)
 
         LaunchedEffect(key1 = Unit) {
             while(true) {
                 delay(1000)
-                println("@@@@ track position ${positionState.value}")
+                println("@@@@ track position ${positionState.toString()}")
             }
         }
     }
