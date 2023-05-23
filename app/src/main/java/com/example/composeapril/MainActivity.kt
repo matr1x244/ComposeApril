@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                 .fillMaxSize()
         ) {
 
-            AnimatedVisibility(visible = visible) {
+            AnimatedVisibility(visible = visible, enter = fadeIn(), exit = fadeOut()) {
                 Image(
                     modifier = Modifier
                         .fillMaxWidth()
