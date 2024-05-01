@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,9 +50,31 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    animatedEffect()
+//                    animatedEffect()
+                    derivedStateOf() //Урок 19
+//                    snapshotFlow()
                 }
             }
+        }
+    }
+
+    private fun snapshotFlow() {
+        TODO("Not yet implemented")
+    }
+
+
+    /**
+     * derivedStateOf
+    Функция derivedStateOf умеет создавать State, который читает значения из других State и подписывается на них.
+     */
+    @Composable
+    private fun derivedStateOf() {
+        Column {
+            var count by remember { mutableStateOf(0) }
+            Text(text = "count = $count", modifier = Modifier.clickable { count++ })
+
+            val countBinary by remember { derivedStateOf { count.toString(2) } }
+            Text(text = "countBinary = $countBinary")
         }
     }
 
